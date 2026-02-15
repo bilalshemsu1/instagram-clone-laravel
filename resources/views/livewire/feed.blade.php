@@ -1,4 +1,6 @@
 <div class="min-h-screen bg-gray-100">
+
+    
     <!-- Navigation Bar -->
     <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,9 +19,6 @@
                     </a>
                     <a href="#" class="text-gray-600 hover:text-gray-800">
                         Search
-                    </a>
-                    <a href="#" class="text-gray-600 hover:text-gray-800">
-                        Explore
                     </a>
                 </div>
 
@@ -47,9 +46,25 @@
             </div>
         </div>
     </nav>
-
+    
     <!-- Main Feed Area -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        @if(session()->has('success'))
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-5">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+
+        @if(session()->has('error'))
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    {{ session('error') }}
+                </div>
+            </div>
+        @endif
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Left Sidebar (Optional) -->
             <div class="hidden md:block md:col-span-1">
@@ -61,6 +76,7 @@
 
             <!-- Center Feed -->
             <div class="md:col-span-2">
+                
                 <div class="space-y-6">
                     @foreach($posts as $post)
                         <!-- Post Placeholder 1 -->
@@ -105,11 +121,15 @@
                                             </svg>
                                         </button>
                                     </div>
-                                    <button class="text-gray-600 hover:text-gray-800">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                        </svg>
-                                    </button>
+                                    @if($post->user_id === auth()->id())
+                                        <button wire:click="deletePost({{ $post->id }})" 
+                                                wire:confirm="Are you sure you want to delete this post?"
+                                                class="text-gray-600 hover:text-gray-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    @endif
                                 </div>
                                 <p class="font-semibold text-gray-800 mb-1">{{ $post->likes_count }} {{ Str::plural('like', $post->likes_count) }}</p>
                                 <p class="text-gray-800">

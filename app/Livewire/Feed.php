@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -89,6 +90,26 @@ class Feed extends Component
         }
     }
 
+
+    public function deletePost($postId){
+        $post = Post::find($postId);
+        
+        if (!$post || $post->user_id !== Auth::id()) {
+            session()->flash('error', 'You cannot delete this post.');
+            return;
+        }
+        
+        // Delete the image file
+        if ($post->image_path) {
+            $path = str_replace('/storage/', '', $post->image_path);
+            Storage::disk('public')->delete($path);
+        }
+        
+        $post->delete();
+        $this->loadPosts();
+        
+        session()->flash('success', 'Post deleted successfully!');
+    }
     public function render()
     {
         return view('livewire.feed');
