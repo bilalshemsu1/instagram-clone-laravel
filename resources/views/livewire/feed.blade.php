@@ -108,15 +108,56 @@
                                     <span class="font-semibold">{{$post->user->name}}</span>
                                     <span class="text-gray-600"> {{$post->caption}}</span>
                                 </p>
-                                <p class="text-gray-500 text-sm mt-2 cursor-pointer hover:text-gray-700">
-                                    View all comments
-                                </p>
-                                <div class="mt-3 border-t border-gray-200 pt-3">
-                                    <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-gray-300 rounded-full mr-3"></div>
-                                        <input type="text" placeholder="Add a comment..." class="flex-1 bg-transparent focus:outline-none text-gray-700">
-                                        <button class="text-blue-500 font-semibold">Post</button>
+                                <p class="font-semibold text-gray-800 mb-1">{{ $post->likes_count }} {{ Str::plural('like', $post->likes_count) }}</p>
+                                <p class="text-gray-600 text-sm mb-2">{{ $post->comments_count }} {{ Str::plural('comment', $post->comments_count) }}</p>
+                                
+                                <!-- Comments Display Area (ADD THIS NEW SECTION ABOVE) -->
+                                <div class="mt-3">
+                                    @if($post->comments->count() > 0)
+                                        <div class="space-y-2 mb-3 max-h-40 overflow-y-auto">
+                                            @foreach($post->comments->take(3) as $comment)
+                                                <div class="flex justify-between items-start">
+                                                    <p class="text-sm">
+                                                        <span class="font-semibold">{{ $comment->user->name }}:</span>
+                                                        <span class="text-gray-700">{{ $comment->content }}</span>
+                                                    </p>
+                                                    @if($comment->user_id === auth()->id())
+                                                        <button wire:click="deleteComment({{ $comment->id }})" class="text-xs text-red-500 hover:text-red-700 ml-2">
+                                                            Delete
+                                                        </button>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                            
+                                            @if($post->comments->count() > 3)
+                                                <button class="text-sm text-gray-500 hover:text-gray-700">
+                                                    View all {{ $post->comments_count }} comments
+                                                </button>
+                                            @endif
+                                        </div>
+                                    @else
+                                        <p class="text-gray-500 text-sm mb-3">No comments yet. Be the first to comment!</p>
+                                    @endif
+
+                                    <!-- Comment Form (UPDATE THIS) -->
+                                    <div class="flex items-center border-t border-gray-200 pt-3">
+                                        <div class="w-8 h-8 bg-gray-300 rounded-full mr-3 flex-shrink-0"></div>
+                                        <form wire:submit.prevent="addComment({{ $post->id }})" class="flex-1 flex">
+                                            <input type="text" 
+                                                wire:model="newComments.{{ $post->id }}" 
+                                                placeholder="Add a comment..." 
+                                                class="flex-1 bg-transparent focus:outline-none text-gray-700 text-sm">
+                                            <button type="submit" 
+                                                    class="text-blue-500 font-semibold text-sm hover:text-blue-700"
+                                                    wire:loading.attr="disabled">
+                                                <span wire:loading.remove>Post</span>
+                                                <span wire:loading>...</span>
+                                            </button>
+                                        </form>
                                     </div>
+                                    @error("newComments.{$post->id}") 
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

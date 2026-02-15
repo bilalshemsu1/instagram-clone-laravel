@@ -39,4 +39,9 @@ class Post extends Model
         $userId = $userId ?? Auth::id();
         return $this->likes()->where('user_id', $userId)->exists();
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
