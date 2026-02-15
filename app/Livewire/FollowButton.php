@@ -23,7 +23,7 @@ class FollowButton extends Component
         $user = User::find($this->userId);
         
         if ($user && Auth::check()) {
-            $this->isFollowing = Auth::user()->isFollowing($this->userId);
+            $this->isFollowing = User::find(Auth::id())->isFollowing($this->userId);
             $this->followerCount = $user->followers_count ?? $user->followers()->count();
         }
     }
@@ -40,13 +40,14 @@ class FollowButton extends Component
             return;
         }
 
+        $currentUser = User::find(Auth::id());
         if ($this->isFollowing) {
             // Unfollow
-            Auth::user()->following()->detach($this->userId);
+            $currentUser->following()->detach($this->userId);
             $this->followerCount--;
         } else {
             // Follow
-            Auth::user()->following()->attach($this->userId);
+            $currentUser->following()->attach($this->userId);
             $this->followerCount++;
         }
 

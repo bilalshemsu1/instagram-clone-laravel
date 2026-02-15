@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\CreatePost;
+use App\Livewire\EditProfile;
 use App\Livewire\Feed;
 use App\Livewire\Login;
 use App\Livewire\Profile;
@@ -20,6 +21,7 @@ Route::middleware(['auth'])->group(function(){
         Auth::logout();
         return redirect()->route('login');
     })->name('logout');
+    Route::get('/edit-profile', EditProfile::class)->name('edit-profile'); 
 });
 
 Route::get('/', function(){

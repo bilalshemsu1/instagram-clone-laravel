@@ -57,7 +57,7 @@
                 <!-- Profile Picture -->
                 <div class="w-32 h-32 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full p-1">
                     <div class="w-full h-full bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
-                        @if($user->profile_picture ?? false)
+                        @if($user->profile_picture)
                             <img src="{{ $user->profile_picture }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
                         @else
                             <span class="text-3xl font-bold text-gray-600">{{ substr($user->name, 0, 1) }}</span>
@@ -70,9 +70,11 @@
                     <div class="flex flex-col md:flex-row items-center md:items-center space-y-2 md:space-y-0 md:space-x-4 mb-4">
                         <h2 class="text-2xl font-bold text-gray-800">{{ $user->name }}</h2>
                         @if($isOwnProfile)
-                            <button class="px-4 py-1 bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-300">
-                                Edit Profile
-                            </button>
+                            <a href="{{ route('edit-profile') }}">
+                                <button class="px-4 py-1 bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-300">
+                                    Edit Profile
+                                </button>
+                            </a>
                         @else
                             <livewire:follow-button :userId="$user->id" wire:key="follow-{{ $user->id }}" />
                         @endif

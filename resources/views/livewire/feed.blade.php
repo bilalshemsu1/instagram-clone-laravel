@@ -67,7 +67,13 @@
                         <div class="bg-white rounded-lg shadow overflow-hidden">
                             <div class="p-4 border-b border-gray-200">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
+                                    <div class="w-10 h-10 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
+                                        @if($post->user->profile_picture)
+                                            <img src="{{ $post->user->profile_picture }}" alt="{{ $post->user->name }}" class="w-full h-full object-cover">
+                                        @else
+                                            <span class="text-lg font-bold text-gray-600">{{ substr($post->user->name, 0, 1) }}</span>
+                                        @endif
+                                    </div>
                                     <a href="/profile/{{$post->user->username}}">
                                         <div>
                                             <h4 class="font-semibold text-gray-800">{{$post->user->name}}</h4>
