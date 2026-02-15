@@ -68,10 +68,12 @@
                             <div class="p-4 border-b border-gray-200">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-800">{{$post->user->name}}</h4>
-                                        <p class="text-sm text-gray-500">{{$post->location}}</p>
-                                    </div>
+                                    <a href="/profile/{{$post->user->username}}">
+                                        <div>
+                                            <h4 class="font-semibold text-gray-800">{{$post->user->name}}</h4>
+                                            <p class="text-sm text-gray-500">{{$post->location}}</p>
+                                        </div>
+                                    </a>
                                 </div>
                             </div>
                             <div class="bg-gray-200 h-96 flex items-center justify-center">
@@ -105,10 +107,9 @@
                                 </div>
                                 <p class="font-semibold text-gray-800 mb-1">{{ $post->likes_count }} {{ Str::plural('like', $post->likes_count) }}</p>
                                 <p class="text-gray-800">
-                                    <span class="font-semibold">{{$post->user->name}}</span>
+                                    <span class="font-semibold">{{$post->user->username}}</span>
                                     <span class="text-gray-600"> {{$post->caption}}</span>
                                 </p>
-                                <p class="font-semibold text-gray-800 mb-1">{{ $post->likes_count }} {{ Str::plural('like', $post->likes_count) }}</p>
                                 <p class="text-gray-600 text-sm mb-2">{{ $post->comments_count }} {{ Str::plural('comment', $post->comments_count) }}</p>
                                 
                                 <!-- Comments Display Area (ADD THIS NEW SECTION ABOVE) -->

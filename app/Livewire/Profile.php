@@ -7,6 +7,7 @@ use App\Models\Post;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Auth;
 
 #[Layout('layouts.app')]
@@ -30,12 +31,16 @@ class Profile extends Component
             $this->user = Auth::user();
         }
 
-        $this->isOwnProfile = Auth::id() === $this->user->id;
+        $this->isOwnProfile = Auth::check() && Auth::id() === $this->user->id;
         $this->loadUserData();
     }
 
+    #[On('followUpdated')]
     public function loadUserData()
     {
+        // Refresh user data to get updated counts
+        $this->user = User::withCount(['followers', 'following'])->find($this->user->id);
+        
         // Load user's posts with counts
         $this->posts = Post::where('user_id', $this->user->id)
             ->withCount(['likes', 'comments'])
@@ -43,10 +48,8 @@ class Profile extends Component
             ->get();
 
         $this->postsCount = $this->posts->count();
-        
-        // These will be used when we add follow system
-        // $this->followersCount = $this->user->followers->count();
-        // $this->followingCount = $this->user->following->count();
+        $this->followersCount = $this->user->followers_count ?? 0;
+        $this->followingCount = $this->user->following_count ?? 0;
     }
 
     public function render()

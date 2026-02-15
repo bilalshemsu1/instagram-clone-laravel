@@ -60,6 +60,56 @@ class User extends Authenticatable
             ->implode('');
     }
 
+   /**
+     * Get the users that this user is following
+     */
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'following_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get the users that follow this user
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 'following_id', 'follower_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if this user is following another user
+     */
+    public function isFollowing($userId)
+    {
+        return $this->following()->where('following_id', $userId)->exists();
+    }
+
+    /**
+     * Check if this user is followed by another user
+     */
+    public function isFollowedBy($userId)
+    {
+        return $this->followers()->where('follower_id', $userId)->exists();
+    }
+
+    /**
+     * Get following count
+     */
+    public function getFollowingCountAttribute()
+    {
+        return $this->following()->count();
+    }
+
+    /**
+     * Get followers count
+     */
+    public function getFollowersCountAttribute()
+    {
+        return $this->followers()->count();
+    }
+
     public function posts() {
         return $this->hasMany(Post::class);
     }

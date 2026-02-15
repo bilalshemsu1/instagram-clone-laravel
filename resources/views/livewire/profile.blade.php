@@ -74,9 +74,7 @@
                                 Edit Profile
                             </button>
                         @else
-                            <button class="px-4 py-1 bg-blue-500 text-white rounded-lg text-sm font-semibold hover:bg-blue-600">
-                                Follow
-                            </button>
+                            <livewire:follow-button :userId="$user->id" wire:key="follow-{{ $user->id }}" />
                         @endif
                     </div>
 
@@ -147,3 +145,14 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('followUpdated', () => {
+            // Optional: Show a small notification
+            console.log('Follow status updated');
+        });
+    });
+</script>
+@endpush
