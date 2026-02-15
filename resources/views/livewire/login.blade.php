@@ -1,35 +1,3 @@
-@extends('layouts.app')
-
-@section('content')
-<?php
-
-use Livewire\Component;
-use App\Models\User;
-
-new class extends Component
-{
-    public $email = '';
-    public $password = '';
-
-    public function login(){
-        $validate = $this->validate([
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:2'
-        ]);
-
-        Auth::attempt([
-            'email'=>$this->email,
-            'password'=>$this->password
-        ]);
-
-        // $this->reset(['name', 'username', 'email', 'password', 'password_confirmation']);
-
-        session()->flash('success', 'Login Successful');
-        $this->redirect('/register');
-    }
-}
-?>
-
 <div class="min-h-screen bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8">
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">Welcome Back</h1>
@@ -37,6 +5,7 @@ new class extends Component
         @if(session('success'))
             <p class="success">{{session('success')}}</p>
         @endif
+        
         <form wire:submit="login">
             <div class="space-y-4">
                 <!-- Email Field -->
@@ -76,4 +45,3 @@ new class extends Component
         </p>
     </div>
 </div>
-@endsection

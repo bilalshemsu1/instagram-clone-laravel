@@ -1,15 +1,14 @@
 <?php
 
+use App\Livewire\Login;
+use App\Livewire\Profile;
+use App\Livewire\Register;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('app');
-})->name('app');
+Route::get('/login', Login::class)->name('login');
+Route::get('/', Register::class)->name('register');
+Route::get('/register', Register::class)->name('register');
 
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
-
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+Route::middleware(['auth'])->group(function(){
+    Route::get("/profile", Profile::class)->name('profile');
+});
