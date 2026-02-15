@@ -21,7 +21,7 @@ class Login extends Component
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
             session()->flash('success', 'Login Successful');
-            return $this->redirect('/profile'); // Change to your actual route
+            return $this->redirect('/feed'); // Change to your actual route
         }
 
         $this->addError('email', 'These credentials do not match our records.');
