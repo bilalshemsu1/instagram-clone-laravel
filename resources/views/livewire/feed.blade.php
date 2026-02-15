@@ -25,11 +25,13 @@
 
                 <!-- Right: Actions -->
                 <div class="flex items-center space-x-4">
-                    <button class="text-gray-600 hover:text-gray-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                        </svg>
-                    </button>
+                    <a href="/create-post">
+                        <button  class="text-gray-600 hover:text-gray-800">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </button>
+                    </a>
                     <a href="{{ route('profile') }}" class="text-gray-600 hover:text-gray-800">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -78,8 +80,9 @@
                             <div class="p-4">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex space-x-4">
-                                        <button class="text-gray-600 hover:text-red-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <button wire:click="toggleLike({{ $post->id }})" 
+                                                class="text-gray-600 hover:text-red-500 {{ $post->isLikedBy(auth()->id()) ? 'text-red-500' : '' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="{{ $post->isLikedBy(auth()->id()) ? 'currentColor' : 'none' }}" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                             </svg>
                                         </button>
@@ -100,7 +103,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <p class="font-semibold text-gray-800 mb-1">{{$post->like_count ?? '0'}} likes</p>
+                                <p class="font-semibold text-gray-800 mb-1">{{ $post->likes_count }} {{ Str::plural('like', $post->likes_count) }}</p>
                                 <p class="text-gray-800">
                                     <span class="font-semibold">{{$post->user->name}}</span>
                                     <span class="text-gray-600"> {{$post->caption}}</span>
