@@ -12,7 +12,8 @@ Route::get('/login', Login::class)->name('login');
 Route::get('/register', Register::class)->name('register');
 
 Route::middleware(['auth'])->group(function(){
-    Route::get("/profile", Profile::class)->name('profile');
+    // Route::get("/profile", Profile::class)->name('profile');
+    Route::get('/profile/{username?}', Profile::class)->name('profile');
     Route::get("/feed", Feed::class)->name('feed');
     Route::get('/create-post', CreatePost::class)->name('create-post');
     Route::post("/logout", function(){
